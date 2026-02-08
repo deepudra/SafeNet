@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SafeNet | Cyber-Defense Core</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Space Grotesk', sans-serif; background: radial-gradient(circle at top right, #1e1b4b, #020617); }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .cyber-border { border-left: 4px solid #6366f1; }
+        .neon-glow:hover { box-shadow: 0 0 15px rgba(99, 102, 241, 0.4); }
+        .scanline { width: 100%; height: 2px; background: rgba(99, 102, 241, 0.1); position: absolute; animation: scan 4s linear infinite; }
+        @keyframes scan { from { top: 0; } to { top: 100%; } }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen relative overflow-x-hidden">
+    <div class="scanline"></div>
+
+    <div id="loginGate" class="fixed inset-0 z-[100] flex items-center justify-center bg-[#020617]/95 backdrop-blur-2xl">
+        <div class="max-w-md w-full p-1 bg-gradient-to-br from-indigo-500 to-cyan-500 rounded-3xl">
+            <div class="bg-slate-900 p-10 rounded-[calc(1.5rem-1px)] text-center">
+                <div class="inline-block p-4 rounded-full bg-indigo-500/10 mb-6 border border-indigo-500/20">
+                    <svg class="w-12 h-12 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                </div>
+                <h2 class="text-3xl font-bold tracking-tight text-white mb-2">SafeNet Login</h2>
+                <p class="text-slate-400 text-sm mb-8">Establish secure handshake with node</p>
+                <div class="space-y-4">
+                    <input id="u" type="text" placeholder="Access ID" class="w-full bg-slate-800/50 border border-slate-700 p-4 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                    <input id="p" type="password" placeholder="Passkey" class="w-full bg-slate-800/50 border border-slate-700 p-4 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                    <button onclick="login()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-4 rounded-xl font-bold uppercase tracking-widest text-sm transition-all shadow-lg shadow-indigo-500/25">Authenticate</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboard" class="max-w-7xl mx-auto p-6 blur-xl transition-all duration-1000">
+        <header class="glass rounded-3xl p-6 mb-8 flex justify-between items-center cyber-border shadow-2xl">
+            <div class="flex items-center gap-4">
+                <div class="bg-indigo-600/20 p-2 rounded-lg border border-indigo-500/30">
+                    <span class="text-xl">⚡</span>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-tighter text-white">SAFENET <span class="text-indigo-400 font-light">CORE_NODE</span></h1>
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                        <p id="addrDisp" class="mono text-[10px] text-slate-500 uppercase tracking-tighter"></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-8">
+                <div class="text-right">
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">Vault Balance</p>
+                    <div class="flex items-center gap-2">
+                        <span class="text-3xl font-bold text-white tabular-nums" id="bal">0</span>
+                        <span class="text-indigo-400 text-xs font-bold">$SAFE</span>
+                    </div>
+                </div>
+                <button onclick="logout()" class="p-3 rounded-xl bg-slate-800 hover:bg-red-900/30 transition-all border border-slate-700">
+                    <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                </button>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-4">
+                <div class="glass p-8 rounded-[2rem] sticky top-6 shadow-2xl">
+                    <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+                        <span class="text-indigo-500">#</span> Report New Intrusion
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="relative">
+                            <label class="text-[10px] uppercase font-bold text-slate-500 mb-2 block ml-1">Suspect URL</label>
+                            <input id="url" type="text" placeholder="https://..." class="w-full bg-slate-900/50 border border-slate-700 p-4 rounded-2xl outline-none focus:border-indigo-500 transition-all mono text-sm">
+                        </div>
+                        <button onclick="report()" class="w-full bg-white text-slate-900 hover:bg-indigo-400 hover:text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all flex items-center justify-center gap-2">
+                            <span>Broadcast to Chain</span>
+                        </button>
+                    </div>
+                    
+                    <div class="mt-10 p-4 bg-indigo-500/5 rounded-2xl border border-indigo-500/10">
+                        <p class="text-[11px] text-indigo-300 leading-relaxed">
+                            <span class="font-bold">NOTICE:</span> Submission requires 2 peer verifications to release $SAFE rewards. Actions are immutable.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-8">
+                <div class="flex justify-between items-center mb-6 px-4">
+                    <h3 class="text-lg font-bold">Network Activity Logs</h3>
+                    <div class="flex gap-2 text-[10px] font-bold uppercase tracking-widest">
+                        <span class="text-slate-500">Filter:</span>
+                        <span class="text-indigo-400">All Threats</span>
+                    </div>
+                </div>
+                <div id="feed" class="space-y-4">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ... (Keep the EXACT same script logic from the previous message) ...
+        // Only the refresh() UI generation needs to match the new styles:
+
+        async function login() {
+            const res = await fetch('/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({username: document.getElementById('u').value, password: document.getElementById('p').value})
+            });
+            if(res.ok) {
+                const data = await res.json();
+                document.getElementById('loginGate').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('blur-xl');
+                document.getElementById('addrDisp').innerText = data.address;
+                refresh();
+            } else alert("Handshake Failed: Invalid Credentials");
+        }
+
+        async function refresh() {
+            const stats = await (await fetch('/stats')).json();
+            const myAddr = stats.address.toLowerCase();
+            document.getElementById('bal').innerText = stats.balance;
+
+            const threats = await (await fetch('/threats')).json();
+            const feed = document.getElementById('feed');
+            feed.innerHTML = "";
+
+            threats.forEach(t => {
+                const isMeReporter = t.reporter.toLowerCase() === myAddr;
+                const isMeVoter = t.verifiers.some(v => v.toLowerCase() === myAddr);
+                
+                let actionBtn = "";
+                let statusColor = t.isBlacklisted ? "border-red-500/40 bg-red-500/5" : "border-slate-700 bg-slate-800/40";
+
+                if(t.isBlacklisted) actionBtn = `<span class="text-red-500 text-[10px] font-black tracking-widest border border-red-500/30 px-3 py-1 rounded-full bg-red-500/10">CONFIRMED_THREAT</span>`;
+                else if(isMeReporter) actionBtn = `<span class="text-slate-500 text-[10px] font-bold uppercase italic">Awaiting Consensus</span>`;
+                else if(isMeVoter) actionBtn = `<span class="text-indigo-400 text-[10px] font-bold uppercase animate-pulse">Verification Logged</span>`;
+                else actionBtn = `<button onclick="verify('${t.url}')" class="bg-indigo-600 hover:bg-indigo-500 px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest">Verify</button>`;
+
+                feed.innerHTML += `
+                    <div class="glass p-6 rounded-3xl border ${statusColor} neon-glow transition-all flex flex-col gap-6">
+                        <div class="flex justify-between items-start">
+                            <div class="max-w-[70%]">
+                                <p class="mono text-sm font-bold text-white break-all mb-2">${t.url}</p>
+                                <div class="flex items-center gap-3">
+                                    <div class="flex items-center gap-1">
+                                        <div class="w-4 h-4 rounded bg-slate-700 flex items-center justify-center text-[8px]">👤</div>
+                                        <p class="text-[10px] text-slate-400 uppercase font-bold">${t.reporterName}</p>
+                                    </div>
+                                    <span class="text-slate-700">|</span>
+                                    <p class="text-[10px] text-slate-500 mono font-bold">${t.reporter.substring(0,10)}...</p>
+                                </div>
+                            </div>
+                            ${actionBtn}
+                        </div>
+                        <div class="flex items-center justify-between pt-4 border-t border-slate-700/50">
+                            <div class="flex items-center gap-4">
+                                <p class="text-[9px] text-slate-500 font-black uppercase tracking-widest">Node_Proof</p>
+                                <div class="flex gap-1.5">
+                                    ${t.verifiers.length ? t.verifiers.map(() => `<div class="w-3 h-3 rounded-sm bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.4)]"></div>`).join('') : '<div class="w-3 h-3 rounded-sm bg-slate-700"></div>'}
+                                </div>
+                            </div>
+                            <p class="text-[10px] font-bold text-indigo-400 mono">${t.verifiers.length}/2 VERIFIED</p>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        async function report() {
+            const val = document.getElementById('url').value;
+            if(!val) return;
+            await fetch('/report', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({url: val})});
+            document.getElementById('url').value = "";
+            refresh();
+        }
+
+        async function verify(u) {
+            await fetch('/verify', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({url: u})});
+            refresh();
+        }
+
+        function logout() { fetch('/logout').then(() => location.reload()); }
+        window.onload = () => {}; // Login gate handles initial load
+    </script>
+</body>
+</html>
