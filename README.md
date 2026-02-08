@@ -148,9 +148,15 @@ http://127.0.0.1:5000
 
 Welcome to the **Cyber-Defense Core** 🧠⚡
 
+![SafeNet Login](Login.png)
+
+![SafeNet Dashboard](Dashboard.png)
+
 ---
 
 ## 🛡️ Security Logic (Proof of Contribution)
+
+![SafeNet](DemoVideo.gif)
 
 ### 🧾 Reporting
 
