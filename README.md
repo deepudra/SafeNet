@@ -2,6 +2,9 @@
 
 SafeNet is a **blockchain-powered cybersecurity platform** that decentralizes threat intelligence. Built with a **Security-First philosophy**, it leverages immutable ledgers to store phishing reports and uses community-driven consensus to verify malicious actors.
 
+![Project Status](https://img.shields.io/badge/Status-Development-indigo)
+![Stack](https://img.shields.io/badge/Stack-Flask--Web3--Tailwind-blue)
+
 ---
 
 ## 🌌 Vision
